@@ -340,9 +340,11 @@ if (recipe.foodType === "Non-Veg" && !showNonVeg) {
   </div>
 
 </section>
+<h1 className="text-4xl font-bold text-center text-gray-800 mt-16 mb-8">
 
+  Explore All Recipes
 
-
+</h1>
       {/* RECIPES SECTION */}
       <div className="p-8">
 
