@@ -108,26 +108,34 @@ function AddRecipe() {
           />
 
 
-          <input
-            type="text"
-            name="ingredients"
-            placeholder="Ingredients separated by commas"
-            value={formData.ingredients}
-            onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
-            required
+          <label className="font-medium">
+             Ingredients
+          </label>
+
+          <textarea
+           name="ingredients"
+           placeholder="Enter ingredients separated by commas"
+           value={formData.ingredients}
+           onChange={handleChange}
+           rows={6}
+           className="w-full border p-3 rounded-lg resize-none"
+           required
           />
 
 
-          <input
-            type="text"
+          <label className="font-medium">
+           Cooking Steps
+          </label>
+
+          <textarea
             name="steps"
-            placeholder="Steps separated by commas"
+            placeholder="One step per line, separated by commas"
             value={formData.steps}
             onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
+            rows={8}
+            className="w-full border p-3 rounded-lg resize-none"
             required
-          />
+           />
 
 
           <input
