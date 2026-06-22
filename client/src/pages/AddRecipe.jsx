@@ -1,13 +1,19 @@
 import { useState } from "react";
 
+import axios from "axios";
+
 import { createRecipe } from "../services/recipeService";
 
 import { useNavigate } from "react-router-dom";
 
 
+
+
 function AddRecipe() {
 
   const navigate = useNavigate();
+
+  const [image, setImage] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -29,6 +35,12 @@ function AddRecipe() {
 
   };
 
+  const handleImageChange = (e) => {
+
+  setImage(e.target.files[0]);
+
+  };
+
 
   const handleSubmit = async (e) => {
 
@@ -36,28 +48,63 @@ function AddRecipe() {
 
     try {
 
-      const recipeData = {
+      let imagePath = "";
 
-        ...formData,
+if (image) {
 
-        ingredients: formData.ingredients
-          .split(",")
-          .map((item) => item.trim()),
+  const uploadData = new FormData();
 
-        steps: formData.steps
-          .split(",")
-          .map((item) => item.trim()),
+  uploadData.append("image", image);
 
-        cookingTime: Number(formData.cookingTime)
+  const uploadResponse = await axios.post(
+    "http://localhost:5000/api/upload",
+    uploadData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    }
+  );
 
-      };
+  imagePath = uploadResponse.data.image;
+
+}
 
 
-      await createRecipe(recipeData);
+const recipeData = {
 
-      alert("Recipe Added Successfully");
+  ...formData,
 
-      navigate("/myrecipes");
+  image: imagePath,
+
+  ingredients: formData.ingredients
+    .split(",")
+    .map((item) => item.trim()),
+
+  steps: formData.steps
+    .split(",")
+    .map((item) => item.trim()),
+
+  cookingTime: Number(formData.cookingTime)
+
+};
+
+
+     await createRecipe(recipeData);
+
+     alert("Recipe Added Successfully");
+
+     setImage(null);
+
+     navigate("/myrecipes");      
+
+
+
+     await createRecipe(recipeData);
+
+     alert("Recipe Added Successfully");
+
+     navigate("/myrecipes");
 
 
       setFormData({
@@ -197,6 +244,17 @@ function AddRecipe() {
            <option value="Veg">Veg</option>
            <option value="Non-Veg">Non-Veg</option>
            </select>
+
+           <label className="font-medium">
+             Recipe Image
+             </label>
+
+           <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="w-full border p-3 rounded-lg"
+           />
 
 
           <select

@@ -10,6 +10,10 @@ const recipeRoutes = require("./routes/recipeRoutes");
 
 const authRoutes = require("./routes/authRoutes");
 
+const path = require("path");
+
+const uploadRoutes = require("./routes/uploadRoutes");
+
 
 dotenv.config();
 
@@ -18,18 +22,28 @@ const app = express();
 
 
 // Middleware
+
 app.use(cors());
 
 app.use(express.json());
 
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
+
 
 // Routes
+
 app.use("/api/recipes", recipeRoutes);
 
 app.use("/api/auth", authRoutes);
 
+app.use("/api/upload", uploadRoutes);
+
 
 // Test Route
+
 app.get("/", (req, res) => {
 
   res.send("API is running");
@@ -38,7 +52,9 @@ app.get("/", (req, res) => {
 
 
 // MongoDB Connection
+
 mongoose.connect(process.env.MONGO_URI)
+
 .then(() => {
 
   console.log("MongoDB Connected");
@@ -50,6 +66,7 @@ mongoose.connect(process.env.MONGO_URI)
   });
 
 })
+
 .catch((error) => {
 
   console.log(error);

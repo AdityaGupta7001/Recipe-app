@@ -13,7 +13,8 @@ const createRecipe = async (req, res) => {
       cookingTime,
       category,
       foodType,
-      difficulty
+      difficulty,
+      image
     } = req.body;
 
     const recipe = await Recipe.create({
@@ -25,6 +26,7 @@ const createRecipe = async (req, res) => {
       category,
       foodType,
       difficulty,
+      image,
 
       user: req.user._id
 
