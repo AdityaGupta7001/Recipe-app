@@ -1,5 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
+import { FaHeart } from "react-icons/fa";
+
+import {
+  addFavorite,
+  removeFavorite
+} from "../services/authService";
+
 import {
   FaClock,
   FaUtensils,
@@ -16,8 +23,12 @@ import {
 function RecipeCard({
   recipe,
   showControls = false,
-  handleDelete
-}) {
+  handleDelete,
+  isFavoritePage = false,
+  onFavoriteRemoved
+})
+
+{
 
   const navigate = useNavigate();
 
@@ -64,159 +75,215 @@ function RecipeCard({
 
   const difficultyStyle = {
 
-    Easy: "bg-green-500",
+  Easy: "bg-green-100 text-green-700",
 
-    Medium: "bg-yellow-500",
+  Medium: "bg-yellow-100 text-yellow-700",
 
-    Hard: "bg-red-500"
+  Hard: "bg-red-100 text-red-700"
 
-  };
+};
+  {/*FAVORITE HANDLER */}
+const handleFavorite = async (e) => {
 
+  e.stopPropagation();
+
+  try {
+
+    if (isFavoritePage) {
+
+      await removeFavorite(recipe._id);
+
+      if (onFavoriteRemoved) {
+
+        onFavoriteRemoved(recipe._id);
+
+      }
+
+      alert("Removed from favorites");
+
+    }
+
+    else {
+
+      await addFavorite(recipe._id);
+
+      alert("Recipe added to favorites ❤️");
+
+    }
+
+  }
+
+  catch (error) {
+
+    console.log(error);
+
+  }
+
+};
 
   return (
 
-    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+    <div
+    onClick={() => navigate(`/recipe/${recipe._id}`)}
+    className="
+      bg-white rounded-2xl overflow-hidden shadow-md
+      cursor-pointer
+      hover:-translate-y-2
+      hover:shadow-2xl
+      transition-all duration-300
+    "
+  >
 
       {/* IMAGE */}
 
       {recipe.image && (
 
-        <img
-          src={`http://localhost:5000${recipe.image}`}
-          alt={recipe.title}
-          className="w-full h-52 object-cover"
-        />
+  <div className="relative">
 
-      )}
+    <img
+      src={`http://localhost:5000${recipe.image}`}
+      alt={recipe.title}
+      className="w-full h-52 object-cover"
+    />
 
+    <button
+      onClick={handleFavorite}
+      className="
+        absolute top-3 right-3
+        bg-white p-2 rounded-full
+        shadow-md
+        hover:scale-110
+        transition
+      "
+    >
+
+      <FaHeart
+  className={
+    isFavoritePage
+      ? "text-red-500"
+      : "text-gray-400"
+  }
+/>
+
+    </button>
+
+  </div>
+
+)}
 
       <div className="p-5">
 
         {/* TITLE + DIFFICULTY */}
+<div className="flex justify-center relative mb-6">
 
-        <div className="flex justify-between items-start mb-3">
+  <h3 className="text-2xl font-bold text-center">
+    {recipe.title}
+  </h3>
 
-          <h3
-            onClick={() =>
-              navigate(`/recipe/${recipe._id}`)
-            }
-            className="text-xl font-bold cursor-pointer hover:text-orange-500"
-          >
-            {recipe.title}
-          </h3>
+  {recipe.foodType && (
 
-          <span
-            className={`
-              text-white text-xs px-3 py-1 rounded-full
-              ${difficultyStyle[recipe.difficulty]}
-            `}
-          >
-            {recipe.difficulty}
-          </span>
+    <div
+      className={`
+        absolute right-0 top-0
+        w-7 h-7
+        border-2
+        flex items-center justify-center
+        rounded-sm
+        ${
+          recipe.foodType === "Veg"
+            ? "border-green-600"
+            : "border-red-600"
+        }
+      `}
+    >
+      <div
+        className={`
+          w-3 h-3 rounded-full
+          ${
+            recipe.foodType === "Veg"
+              ? "bg-green-600"
+              : "bg-red-600"
+          }
+        `}
+      />
+    </div>
 
-        </div>
+  )}
+
+</div>
 
 
-        {/* CATEGORY */}
 
-        <div className="flex items-center gap-2 text-gray-600 mb-4">
-
-          {categoryIcons[recipe.category]}
-
-          <span>
-            {recipe.category}
-          </span>
-
-        </div>
 
 
         {/* TIMER */}
 
-        <div className="flex items-center justify-between mb-4">
+<div className="flex flex-col items-center mb-6">
 
-          <div className="flex items-center gap-2">
+  <FaClock className="text-orange-500 mb-2 text-2xl" />
 
-            <FaClock className="text-orange-500" />
+  <p className="text-5xl font-bold">
+    {recipe.cookingTime}
+  </p>
 
-            <div>
+  <p className="text-gray-500 mb-3">
+    mins
+  </p>
 
-              <p className="text-2xl font-bold">
-                {recipe.cookingTime}
-              </p>
+  <span
+    className={`px-3 py-1 rounded-full text-sm font-semibold ${timeStyle}`}
+  >
+    {timeLabel}
+  </span>
 
-              <p className="text-sm text-gray-500">
-                mins
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <span
-            className={`px-3 py-1 rounded-full text-sm font-semibold ${timeStyle}`}
-          >
-            {timeLabel}
-          </span>
-
-        </div>
-
-
-        {/* VEG/NON-VEG */}
-
-        {recipe.foodType && (
-
-          <div className="mb-4">
-
-            <div
-              className={`
-                w-6 h-6
-                border-2
-                flex items-center justify-center
-                rounded-sm
-                ${
-                  recipe.foodType === "Veg"
-                    ? "border-green-600"
-                    : "border-red-600"
-                }
-              `}
-            >
-              <div
-                className={`
-                  w-3 h-3 rounded-full
-                  ${
-                    recipe.foodType === "Veg"
-                      ? "bg-green-600"
-                      : "bg-red-600"
-                  }
-                `}
-              />
-            </div>
-
-          </div>
-
-        )}
+</div>
 
 
         {/* BUTTONS */}
+
+
+        <div className="flex justify-between items-center mt-6">
+
+  <span
+    className={`
+      px-3 py-1 rounded-full text-sm font-semibold
+      ${difficultyStyle[recipe.difficulty]}
+    `}
+  >
+    {recipe.difficulty}
+  </span>
+
+  <div className="flex items-center gap-2 text-gray-600">
+
+    {categoryIcons[recipe.category]}
+
+    <span>
+      {recipe.category}
+    </span>
+
+  </div>
+
+</div>
 
         {showControls && (
 
           <div className="flex gap-3 mt-4">
 
             <button
-              onClick={() =>
-                navigate(`/edit/${recipe._id}`)
-              }
-              className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-            >
-              Edit
-            </button>
+              onClick={(e) => {
+                 e.stopPropagation();
+                navigate(`/edit/${recipe._id}`);
+               }}
+                 className="flex-1 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+             >
+                Edit
+              </button>
 
-            <button
-              onClick={() =>
-                handleDelete(recipe._id)
-              }
+             <button
+              onClick={(e) => {
+               e.stopPropagation();
+              handleDelete(recipe._id);
+              }}
               className="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600"
             >
               Delete

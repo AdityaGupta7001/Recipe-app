@@ -16,6 +16,8 @@ import MyRecipes from "./pages/MyRecipes";
 
 import Navbar from "./components/Navbar";
 
+import Favorites from "./pages/Favorites";
+
 
 function App() {
 
@@ -60,6 +62,10 @@ function App() {
         <Route
           path="/my-recipes"
           element={<MyRecipes />}
+        />
+        <Route
+          path="/favorites"
+          element={<Favorites />}
         />
 
       </Routes>

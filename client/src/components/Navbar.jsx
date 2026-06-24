@@ -43,6 +43,13 @@ function Navbar() {
           Home
         </Link>
 
+        <Link
+          to="/favorites"
+          className="hover:text-orange-500"
+        >
+          Favorites
+        </Link>
+
 
         {userInfo ? (
 
