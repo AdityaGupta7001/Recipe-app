@@ -18,6 +18,8 @@ import Navbar from "./components/Navbar";
 
 import Favorites from "./pages/Favorites";
 
+import Profile from "./pages/Profile";
+
 
 function App() {
 
@@ -67,6 +69,11 @@ function App() {
           path="/favorites"
           element={<Favorites />}
         />
+
+        <Route
+         path="/profile"
+        element={<Profile />}
+       />
 
       </Routes>
 

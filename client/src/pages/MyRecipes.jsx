@@ -114,14 +114,4 @@ function MyRecipes() {
 
 }
 
-console.log("Current User ID:", currentUserId);
-
-data.forEach(recipe => {
-  console.log(
-    recipe.title,
-    "Recipe User:",
-    recipe.user
-  );
-});
-
 export default MyRecipes;
