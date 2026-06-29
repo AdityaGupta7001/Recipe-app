@@ -18,7 +18,8 @@ function EditRecipe() {
     steps: "",
     cookingTime: "",
     category: "",
-    difficulty: "Easy"
+    difficulty: "Easy",
+    image: ""
   });
 
 
@@ -46,7 +47,8 @@ function EditRecipe() {
         steps: recipe.steps.join(", "),
         cookingTime: recipe.cookingTime,
         category: recipe.category,
-        difficulty: recipe.difficulty
+        difficulty: recipe.difficulty,
+        image: recipe.image || ""
       });
 
     } catch (error) {
@@ -120,8 +122,8 @@ function EditRecipe() {
     } catch (error) {
 
       console.log(error.response);
-console.log(error.response.data);
-console.log(error.response.status);
+      console.log(error.response.data);
+      console.log(error.response.status);
 
       alert("Failed to update recipe");
 
@@ -157,25 +159,33 @@ console.log(error.response.status);
           />
 
 
-          <input
-            type="text"
-            name="ingredients"
-            placeholder="Ingredients separated by commas"
-            value={formData.ingredients}
-            onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
-            required
+          <label className="font-medium">
+             Ingredients
+          </label>
+
+          <textarea
+          name="ingredients"
+          placeholder="Enter ingredients separated by commas"
+          value={formData.ingredients}
+          onChange={handleChange}
+          rows={6}
+          className="w-full border p-3 rounded-lg resize-none"
+          required
           />
 
 
-          <input
-            type="text"
-            name="steps"
-            placeholder="Steps separated by commas"
-            value={formData.steps}
-            onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
-            required
+          <label className="font-medium">
+            Cooking Steps
+          </label>
+
+          <textarea
+          name="steps"
+          placeholder="Enter steps separated by commas"
+          value={formData.steps}
+          onChange={handleChange}
+          rows={8}
+          className="w-full border p-3 rounded-lg resize-none"
+          required
           />
 
 
@@ -189,6 +199,23 @@ console.log(error.response.status);
             className="w-full border p-3 rounded-lg"
             required
           />
+
+           <input
+            type="text"
+            name="image"
+            placeholder="Paste image URL"
+            value={formData.image}
+            onChange={handleChange}
+            className="w-full border p-3 rounded-lg"
+           />
+
+            {formData.image && (
+            <img
+            src={formData.image}
+            alt="Preview"
+            className="w-full h-48 object-cover rounded-lg"
+            />
+           )}
 
 
           <select

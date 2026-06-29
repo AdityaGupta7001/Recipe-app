@@ -23,11 +23,13 @@ function MyRecipes() {
       const data = await getRecipes();
       console.log("ALL RECIPES:", data);
 
+      const currentUserId = userInfo.user.id;
+
       const myRecipes = data.filter(
-        (r) =>
-          r.user?._id === userInfo._id ||
-          r.user === userInfo._id
-      );
+      (recipe) =>
+      recipe.user?._id === currentUserId ||
+      recipe.user === currentUserId
+     );
 
       setRecipes(myRecipes);
 
@@ -111,5 +113,15 @@ function MyRecipes() {
   );
 
 }
+
+console.log("Current User ID:", currentUserId);
+
+data.forEach(recipe => {
+  console.log(
+    recipe.title,
+    "Recipe User:",
+    recipe.user
+  );
+});
 
 export default MyRecipes;

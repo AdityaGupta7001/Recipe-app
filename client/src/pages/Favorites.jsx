@@ -33,6 +33,17 @@ function Favorites() {
   };
 
 
+  const handleFavoriteRemoved = (recipeId) => {
+
+    setFavorites((prevFavorites) =>
+      prevFavorites.filter(
+        (recipe) => recipe._id !== recipeId
+      )
+    );
+
+  };
+
+
   return (
 
     <div className="min-h-screen bg-gray-100 p-8">
@@ -43,7 +54,7 @@ function Favorites() {
 
       {favorites.length === 0 ? (
 
-        <p className="text-center text-gray-500">
+        <p className="text-center text-gray-500 text-lg">
           No favorite recipes yet.
         </p>
 
@@ -56,6 +67,8 @@ function Favorites() {
             <RecipeCard
               key={recipe._id}
               recipe={recipe}
+              isFavoritePage={true}
+              onFavoriteRemoved={handleFavoriteRemoved}
             />
 
           ))}
